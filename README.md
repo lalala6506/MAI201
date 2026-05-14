@@ -13,8 +13,9 @@ QUICK startup guild
    - Option B: Set up SSH key (recommended) — see Step 5 above
 
 3. Set up your environment
-   conda env create -f environment.yml
-   conda activate MLOPS
+
+   - conda env create -f environment.yml
+   - conda activate MLOPS
 
 4. SET up .env
 
