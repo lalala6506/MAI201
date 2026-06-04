@@ -20,4 +20,5 @@ QUICK startup guild
 4. SET up .env
 
    set up the api keys
-test
+
+Testing Testing 
