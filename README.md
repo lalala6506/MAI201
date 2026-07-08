@@ -1,24 +1,26 @@
-# MAI201
-Giroup Project for ML OPS Project
+## How to Run
 
-QUICK startup guild
+```bash
+# 1. Clone the repo
+git clone https://github.com/lalala6506/MAI201.git
+cd MAI201
 
-## Getting Started
+# 2. Activate your conda environment
+conda activate your-env-name
 
-1. Clone the repo
-   git clone https://github.com/lalala6506/MAI201.git
+# 3. Install dependencies
+pip install -r requirements.txt
 
-2. Authenticate with GitHub (do this once)
-   - Option A: Generate a Personal Access Token at github.com → Settings → Developer settings
-   - Option B: Set up SSH key (recommended) — see Step 5 above
+# 4. Pull data from DVC remote
+dvc pull
 
-3. Set up your environment
+# 5. Run the full pipeline (prepare, train, evaluate)
+dvc repro
 
-   - conda env create -f environment.yml
-   - conda activate MLOPS
+# 6. View metrics
+dvc metrics show
 
-4. SET up .env
-
-   set up the api keys
-
-Testing Testing 
+# 7. Compare experiments in MLflow
+mlflow ui
+# Open http://localhost:5000
+```

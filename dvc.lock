@@ -1,0 +1,108 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - path: data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv
+      hash: md5
+      md5: 0f9de68e012bd3aed5fa7cdc9fc421af
+      size: 977501
+    - path: src/prepare.py
+      hash: md5
+      md5: 817befb4490965da25e6da496c21c0e5
+      size: 5431
+    outs:
+    - path: data/processed/feature_columns.json
+      hash: md5
+      md5: 6d5faca185e679371041ac1a51d1b8ca
+      size: 599
+    - path: data/processed/test.csv
+      hash: md5
+      md5: a0d42f8fbb94bd269ea7701d7eafbafc
+      size: 67382
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 1fdfdefdf070d9d5b2daf08e7e1b624c
+      size: 312759
+    - path: data/processed/val.csv
+      hash: md5
+      md5: 9ad1bb824116a8687baf9443ceeb9aa4
+      size: 67374
+  train:
+    cmd: python src/train.py --model random_forest
+    deps:
+    - path: data/processed/feature_columns.json
+      hash: md5
+      md5: 6d5faca185e679371041ac1a51d1b8ca
+      size: 599
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 1fdfdefdf070d9d5b2daf08e7e1b624c
+      size: 312759
+    - path: data/processed/val.csv
+      hash: md5
+      md5: 9ad1bb824116a8687baf9443ceeb9aa4
+      size: 67374
+    - path: params.yaml
+      hash: md5
+      md5: 7d411bd614fe8a889eb2a573420ab2b6
+      size: 1225
+    - path: src/train.py
+      hash: md5
+      md5: 2faf57d4d4c678edc7146212a68e6b84
+      size: 6107
+    params:
+      params.yaml:
+        random_forest:
+          n_estimators: 200
+          max_depth: 10
+          class_weight: balanced
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 96ee38f8a783a05a5bb2a02c849a349f
+      size: 11211673
+    - path: models/scaler.pkl
+      hash: md5
+      md5: acbec32c29f693a14c7d6583dff06472
+      size: 927
+    - path: reports/metrics.json
+      hash: md5
+      md5: 3c34d093603523ed2c8904993d7e4424
+      size: 104
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: a0d42f8fbb94bd269ea7701d7eafbafc
+      size: 67382
+    - path: models/model.pkl
+      hash: md5
+      md5: 96ee38f8a783a05a5bb2a02c849a349f
+      size: 11211673
+    - path: models/scaler.pkl
+      hash: md5
+      md5: acbec32c29f693a14c7d6583dff06472
+      size: 927
+    - path: src/evaluate.py
+      hash: md5
+      md5: ac561759478da9c76ce21baacaeb80f3
+      size: 5643
+    outs:
+    - path: reports/metrics_test.json
+      hash: md5
+      md5: 61d271b759103b5dcf474b3e48aaf01e
+      size: 104
+    - path: reports/plots/confusion_matrix.png
+      hash: md5
+      md5: 495f8682c6d845b8dae12a1e203e111f
+      size: 23179
+    - path: reports/plots/feature_importance.png
+      hash: md5
+      md5: da81cf72881e08df52167848f83cc924
+      size: 61897
+    - path: reports/plots/roc_curve.png
+      hash: md5
+      md5: 21b95e880c282c28dfd8a2fb18e6e35b
+      size: 53218
