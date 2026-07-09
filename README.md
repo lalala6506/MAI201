@@ -40,7 +40,7 @@ Phase 1 covers the dataset, architecture, DVC pipeline, and MLflow experiment tr
 | Services (10) | `PhoneService`, `MultipleLines`, `InternetService`, `OnlineSecurity`, `OnlineBackup`, `DeviceProtection`, `TechSupport`, `StreamingTV`, `StreamingMovies` |
 | Identifier (dropped) | `customerID` - unique per row, no predictive value |
 
-12 of these are binary (Label-encoded) and 3 are multi-category (`InternetService`, `Contract`, `PaymentMethod`, one-hot encoded), giving 19 encoded feature columns after `prepare.py` runs.
+12 of these are binary (Label-encoded) and 3 are multi-category (`InternetService`, `Contract`, `PaymentMethod`, one-hot encoded), giving 26 encoded feature columns after `prepare.py` runs.
 
 ### Data Quality Assessment
 
@@ -65,7 +65,7 @@ Phase 1 covers the dataset, architecture, DVC pipeline, and MLflow experiment tr
 The raw CSV and every processed split are tracked with DVC rather than committed to Git directly:
 
 ```bash
-dvc add data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv
+dvc add data/raw/Telco_Customer_Churn.csv
 dvc remote add -d storage <remote-url>
 dvc push
 ```
