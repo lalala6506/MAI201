@@ -1,0 +1,41 @@
+# params.yaml
+# -----------
+# All model hyperparameters live here.
+# No values are hardcoded in any Python script.
+#
+# DVC watches this file. Changing a value and running dvc repro
+# re-runs the train stage automatically with the new settings.
+# MLflow logs these values so every experiment is linked to
+# the exact configuration that produced it.
+#
+# To run a new experiment:
+#   1. Change a value below.
+#   2. Run: dvc repro
+#   3. Open the MLflow UI: mlflow ui
+
+
+logistic:
+  C: 1.0
+  # Inverse regularization strength. Higher C = less regularization.
+  # Values to try: 0.01, 0.1, 1.0, 10.0
+
+  max_iter: 200
+  # Maximum solver iterations. Increase if you see ConvergenceWarning.
+  # Values to try: 100, 200, 500
+
+  class_weight: "balanced"
+  # Adjusts sample weights to account for the 26.5% class imbalance.
+  # Without this, the model tends to predict "no churn" for everything.
+
+
+random_forest:
+  n_estimators: 200
+  # Number of decision trees. More trees = more stable predictions.
+  # Values to try: 100, 200, 300, 500
+
+  max_depth: 10
+  # Maximum depth of each tree. Deeper trees can overfit.
+  # Values to try: 5, 10, 15, 20
+
+  class_weight: "balanced"
+  # Same rationale as logistic. Handles the class imbalance.
