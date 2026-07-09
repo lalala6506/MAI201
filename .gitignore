@@ -39,3 +39,7 @@ Thumbs.db
 # API Keys and credentials
 #####################
 .env
+
+# Ignore data files
+echo "data/raw/*.csv" >> .gitignore
+git add .gitignore

@@ -93,7 +93,7 @@ def plot_feature_importance(model, feature_names: list, out: Path) -> None:
     if not hasattr(model, "feature_importances_"):
         print("Skipping feature importance (not a tree-based model).")
         return
-    import pandas as pd
+
     s = pd.Series(model.feature_importances_, index=feature_names).nlargest(15).sort_values()
     fig, ax = plt.subplots(figsize=(8, 6))
     s.plot(kind="barh", ax=ax, color="#4f86c6")
