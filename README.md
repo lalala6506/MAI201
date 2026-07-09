@@ -78,3 +78,16 @@ This keeps the Git repo lightweight while still giving every team member and the
 ![Pipeline Diagram](docs/architecture.png)
 
 The pipeline runs left to right: raw data is versioned and cleaned (`prepare.py`), trained with MLflow experiment tracking (`train.py`), scored on the held-out test set (`evaluate.py`), then served via FastAPI, containerized with Docker, and deployed to Render. A monitoring loop (EvidentlyAI drift checks) watches the deployed model in production and can trigger retraining. GitHub Actions runs the pipeline and tests on every push.
+## Technology Stack
+
+| Tool | Why we chose it |
+|---|---|
+| scikit-learn | Logistic Regression and Random Forest models. Simple, well-documented, and fast for this dataset size. |
+| DVC | Versions data files and defines the pipeline. dvc repro re-creates any result from scratch. |
+| MLflow | Logs every experiment run with its parameters, metrics, and model so runs can be compared. |
+| FastAPI | Serves predictions as a REST API. Auto-generates interactive docs at /docs. |
+| Docker | Packages the API into a container so it runs identically on any machine or cloud. |
+| GitHub Actions | Runs tests on every push. Blocks deployment if any test fails. |
+| EvidentlyAI | Detects when production data drifts from training data and flags retraining. |
+
+**Deployment strategy:** Batch on-demand. A customer record is sent as a POST request to the /predict endpoint and a churn probability is returned.
