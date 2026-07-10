@@ -29,11 +29,11 @@ logistic:
 
 
 random_forest:
-  n_estimators: 200
+  n_estimators: 300
   # Number of decision trees. More trees = more stable predictions.
   # Values to try: 100, 200, 300, 500
 
-  max_depth: 10
+  max_depth: 15
   # Maximum depth of each tree. Deeper trees can overfit.
   # Values to try: 5, 10, 15, 20
 
