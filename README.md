@@ -135,11 +135,11 @@ Evaluated by `evaluate.py` on the held-out test set (never touched during traini
 
 | Metric | Value |
 |---|---|
-| Accuracy | 0.7919 |
-| Precision | 0.6287 |
-| Recall | 0.5302 |
-| F1 Score | 0.5753 |
-| ROC-AUC | 0.8259 |
+| Accuracy | 0.7474 |
+| Precision | 0.5165 |
+| Recall | 0.7794 |
+| F1 Score | 0.6213 |
+| ROC-AUC | 0.8448 |
 
 ## What Is Not Committed to Git
 
