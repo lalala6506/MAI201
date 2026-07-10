@@ -12,4 +12,12 @@ Tuning the Random Forest to a higher `max_depth` (10 → 15) and more estimators
 
 Against the Phase 0 proposal's targets (ROC-AUC ≥ 0.84, churn recall ≥ 0.70), **only Experiments 1 and 2 clear the recall bar**; Experiment 3 falls short at 0.58. Between those two, the baseline Random Forest (Experiment 2) is the strongest overall it matches Logistic Regression's ROC-AUC (0.84) while improving accuracy, precision, and F1, at the cost of some recall (0.74 vs 0.81).
 
-ROC-AUC and recall were prioritized over raw accuracy throughout, since the ~26.5% churn class imbalance makes accuracy misleading a model predicting "no churn" for every customer would still score roughly 73.5% accuracy while catching zero actual churners.
+## Metric Used for Model Selection
+
+**ROC-AUC and churn recall** were used as the primary metrics for comparing and selecting between experiments, not accuracy.
+
+This dataset is imbalanced (~73.5% no-churn / 26.5% churned), which makes accuracy a misleading metric: a model that predicts "no churn" for every customer would still score ~73.5% accuracy while catching zero actual churners. ROC-AUC measures how well the model ranks churners above non-churners across all thresholds, independent of class balance, making it a more reliable signal of true model quality here.
+
+Recall on the churn class was weighted just as heavily because of the asymmetric business cost in this problem: a **false negative** (a churner the model misses) means a lost customer with no retention attempt made, while a **false positive** (a loyal customer flagged as at-risk) only costs an unnecessary retention offer. Missing a churner is more expensive than a wasted discount, so a model with high recall even at some cost to precision is more aligned with the business goal. This matches the targets set in the Phase 0 proposal: ROC-AUC ≥ 0.84 and churn recall ≥ 0.70.
+
+Accuracy, precision, and F1 are still reported for completeness, but were treated as secondary useful context, not the deciding factor.
