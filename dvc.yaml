@@ -36,7 +36,7 @@ stages:
   # Reads the processed training data and params.yaml.
   # Produces a trained model and validation metrics.
   train:
-    cmd: python src/train.py --model random_forest
+    cmd: python src/train.py --model logistic
     deps:
       - src/train.py
       - data/processed/train.csv
@@ -68,7 +68,6 @@ stages:
     outs:
       - reports/plots/confusion_matrix.png
       - reports/plots/roc_curve.png
-      - reports/plots/feature_importance.png
     metrics:
       - reports/metrics_test.json:
           cache: false
