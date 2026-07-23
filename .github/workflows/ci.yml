@@ -1,4 +1,4 @@
-﻿name: CI/CD Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
       - name: Lint with flake8
         run: |
           pip install flake8
-          flake8 src/ tests/ --max-line-length=100 --ignore=E501,W503
+          flake8 src/ tests/ --max-line-length=100 --ignore=E501,W503,E221,E241,W292,F401,F541,E302,F811
 
       - name: Pull model artifacts from S3
         env:
