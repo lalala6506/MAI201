@@ -1,6 +1,6 @@
 # Core ML
 scikit-learn>=1.3.0
-pandas>=2.0.0
+pandas>=2.0.0,<3
 numpy>=1.24.0
 matplotlib>=3.7.0
 seaborn>=0.12.0
@@ -10,11 +10,15 @@ joblib>=1.3.0
 dvc[s3]>=3.0.0
 
 # Experiment tracking
-mlflow>=2.0.0
+mlflow>=2.0.0,<3.14.0
 
 # API serving (Phase 2)
 fastapi>=0.100.0
 uvicorn>=0.23.0
+
+# Direct S3 download in the container (see download_model.py), avoids
+# needing DVC/git inside the Docker image
+boto3>=1.28.0
 
 # Utilities
 pyyaml>=6.0
