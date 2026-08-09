@@ -72,10 +72,16 @@ jobs:
         run: docker build -t churn-predictor .
 
       - name: Test Docker container health
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          docker run -d -p 8000:8000 --name test-api churn-predictor
-          sleep 10
-          curl -f http://localhost:8000/health || exit 1
+          docker run -d -p 8000:8000 \
+            -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+            -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+            --name test-api churn-predictor
+          sleep 15
+          curl -f http://localhost:8000/health || (docker logs test-api && exit 1)
           docker stop test-api
 
   deploy:
