@@ -1,0 +1,6 @@
+{
+  "drift_detected": false,
+  "drifted_features": 0,
+  "total_features": 26,
+  "report_path": "reports/drift/data_drift_report.html"
+}
