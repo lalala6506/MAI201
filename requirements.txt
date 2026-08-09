@@ -22,6 +22,13 @@ boto3>=1.28.0
 
 # Utilities
 pyyaml>=6.0
+
+# Model Monitor 
+evidently<0.7 
+
+# File encryption properties, configurations
+pyarrow<25 
+cryptography>=43,<44
 # Testing (needed for CI, not just local dev)
 pytest>=7.4.0
 httpx>=0.24.0
