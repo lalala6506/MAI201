@@ -68,7 +68,6 @@ def generate_drift_report(reference: pd.DataFrame, current: pd.DataFrame):
     drift_detected = False
     drifted_features = 0
     total_features = 0
-    found = False
 
     for metric in metrics:
         if metric.get("metric") == "DatasetDriftMetric":
@@ -76,14 +75,13 @@ def generate_drift_report(reference: pd.DataFrame, current: pd.DataFrame):
             drifted_features = r.get("number_of_drifted_columns", 0)
             total_features = r.get("number_of_columns", 0)
             drift_detected = r.get("dataset_drift", False)
-            found = True
             break
-
-    if not found:
+    
+    else:
         raise RuntimeError("DatasetDriftMetric not found in report output")
 
     summary = {
-        "drift_detected":   drift_detected if "drift_detected" in dir() else False,
+        "drift_detected":   drift_detected,
         "drifted_features": drifted_features,
         "total_features":   total_features,
         "report_path":      str(REPORT_PATH),
@@ -92,7 +90,7 @@ def generate_drift_report(reference: pd.DataFrame, current: pd.DataFrame):
     with open(SUMMARY_PATH, "w") as f:
         json.dump(summary, f, indent=2)
 
-    print(f"\nDrift Summary:")
+    print("\nDrift Summary:")
     print(f"  Drift detected:   {summary['drift_detected']}")
     print(f"  Drifted features: {summary['drifted_features']} / {summary['total_features']}")
     print(f"  Summary saved:    {SUMMARY_PATH}")

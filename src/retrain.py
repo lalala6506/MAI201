@@ -37,7 +37,7 @@ TEST_PATH     = Path("data/processed/test.csv")
 FEATURES_PATH = Path("data/processed/feature_columns.json")
 MODEL_PATH    = Path("models/model.pkl")
 SCALER_PATH   = Path("models/scaler.pkl")
-METRICS_PATH  = Path("reports/metrics/metrics_test.json")
+METRICS_PATH  = Path("reports/metrics_test.json")
 RETRAIN_PATH  = Path("reports/metrics/retrain_comparison.json")
 
 
