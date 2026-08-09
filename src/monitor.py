@@ -76,7 +76,6 @@ def generate_drift_report(reference: pd.DataFrame, current: pd.DataFrame):
             total_features = r.get("number_of_columns", 0)
             drift_detected = r.get("dataset_drift", False)
             break
-    
     else:
         raise RuntimeError("DatasetDriftMetric not found in report output")
 

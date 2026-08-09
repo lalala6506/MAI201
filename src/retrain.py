@@ -104,16 +104,16 @@ def retrain(X_train, y_train, X_test, y_test) -> dict:
 
 def print_comparison(current: dict, new: dict):
     """Print a side-by-side comparison table."""
-    print("\n" + "="*55)
+    print("\n" + "=" * 55)
     print(f"{'Metric':<15} {'Current Model':>18} {'New Model':>18}")
-    print("="*55)
+    print("=" * 55)
     for key in ["roc_auc", "recall", "f1", "accuracy", "precision"]:
         curr_val = current.get(key, 0)
         new_val  = new.get(key, 0)
         delta    = new_val - curr_val
         arrow    = "+" if delta > 0 else ""
         print(f"{key:<15} {curr_val:>18.4f} {new_val:>14.4f} ({arrow}{delta:.4f})")
-    print("="*55)
+    print("=" * 55)
 
 
 if __name__ == "__main__":
