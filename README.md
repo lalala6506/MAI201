@@ -185,7 +185,7 @@ docker stop $(docker ps -q)
 [Drift Report](reports/drift/data_summary.json)
 
 ## How to monitor and retraining
-python src/monitor.py
+python src/monitor.py\
 MLFLOW_TRACKING_URI=sqlite:///mlflow.db python src/retrain.py
 
 
