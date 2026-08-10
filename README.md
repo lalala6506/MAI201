@@ -145,7 +145,7 @@ Evaluated by `evaluate.py` on the held-out test set (never touched during traini
 
 ## MODEL CARD
 
-![Model Card Detail](model_cards.md)
+![Model Card Detail](model_card.md)
 
 ## What Is Not Committed to Git
 
@@ -238,5 +238,5 @@ curl https://churn-predictor-4pg2.onrender.com/health
 # 9. how to run tests
 pytest tests/test_api.py -v
 
-#
+
 ```
