@@ -165,34 +165,32 @@ Docs: https://churn-predictor-4pg2.onrender.com/docs
 
 ## Build and Test Docker
 
-##### Build the Docker image
+#### Build the Docker image
 docker build -t churn-predictor .
 
 
-##### Run the container
+#### Run the container
 docker run -p 5001:8000 churn-predictor
 Windows can also use: docker run -p 8000:8000 churn-predictor
 
-##### In a second terminal -- test it
+#### In a second terminal -- test it
 curl http://localhost:5001/health
 Must return: {"status":"ok",...}
 
-##### Stop the container (Ctrl+C or)
+#### Stop the container (Ctrl+C or)
 docker stop $(docker ps -q)
 
 # Monitor and Retraining
 
 [Drift Report](reports/drift/data_summary.json)
 
-###### How to retrain
-## How to run
+## How to monitor and retraining
 python src/monitor.py
 MLFLOW_TRACKING_URI=sqlite:///mlflow.db python src/retrain.py
 
 
 
-
-## How to Run
+# How to Run
 
 ```bash
 # 1. Clone the repo
