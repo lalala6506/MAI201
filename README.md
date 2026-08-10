@@ -1,9 +1,10 @@
+[![CI](https://github.com/lalala6506/MAI201/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/lalala6506/MAI201/actions/workflows/ci.yml)
 # MAI201 MLOps - Customer Churn Prediction
 
 Predicts which telecom customers are likely to cancel their subscription.
 Phase 1 covers the dataset, architecture, DVC pipeline, and MLflow experiment tracking.
 
-[![CI](https://github.com/lalala6506/MAI201/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/lalala6506/MAI201/actions/workflows/ci.yml)
+
 
 **Team:** Group 2 | Seneca Polytechnic | Summer 2026 | Instructor: Asma Azim
 
