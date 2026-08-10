@@ -165,25 +165,26 @@ Docs: https://churn-predictor-4pg2.onrender.com/docs
 
 ## Build and Test Docker
 
-# Build the Docker image
+##### Build the Docker image
 docker build -t churn-predictor .
-# Watch for errors. Build takes ~2 min first time.
 
-# Run the container
+
+##### Run the container
 docker run -p 5001:8000 churn-predictor
-# Windows can also use: docker run -p 8000:8000 churn-predictor
+Windows can also use: docker run -p 8000:8000 churn-predictor
 
-# In a second terminal -- test it
+##### In a second terminal -- test it
 curl http://localhost:5001/health
-# Must return: {"status":"ok",...}
+Must return: {"status":"ok",...}
 
-# Stop the container (Ctrl+C or)
+##### Stop the container (Ctrl+C or)
 docker stop $(docker ps -q)
 
 # Monitor and Retraining
 
 [Drift Report](reports/drift/data_drift_report.html)
-Monitoring section with link to drift report
+
+
 
 
 ## How to Run
