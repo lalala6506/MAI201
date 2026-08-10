@@ -3,6 +3,8 @@
 Predicts which telecom customers are likely to cancel their subscription.
 Phase 1 covers the dataset, architecture, DVC pipeline, and MLflow experiment tracking.
 
+[![CI](https://github.com/lalala6506/MAI201/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/lalala6506/MAI201/actions/workflows/ci.yml)
+
 **Team:** Group 2 | Seneca Polytechnic | Summer 2026 | Instructor: Asma Azim
 
 ---
@@ -157,6 +159,32 @@ These files exist locally or in DVC/S3 but are never committed to the Git repo:
 | `mlflow.db` | Local MLflow SQLite database | Machine-specific |
 | `.dvc/config.local` | S3 credentials | Never leave your machine |
 
+## Live Demo API 
+Live URL: https://churn-predictor-4pg2.onrender.com
+Docs: https://churn-predictor-4pg2.onrender.com/docs
+
+## Build and Test Docker
+
+# Build the Docker image
+docker build -t churn-predictor .
+# Watch for errors. Build takes ~2 min first time.
+
+# Run the container
+docker run -p 5001:8000 churn-predictor
+# Windows can also use: docker run -p 8000:8000 churn-predictor
+
+# In a second terminal -- test it
+curl http://localhost:5001/health
+# Must return: {"status":"ok",...}
+
+# Stop the container (Ctrl+C or)
+docker stop $(docker ps -q)
+
+# Monitor and Retraining
+
+[Drift Report](reports/drift/data_drift_report.html)
+Monitoring section with link to drift report
+
 
 ## How to Run
 
@@ -188,4 +216,6 @@ dvc metrics show
 mlflow ui --port 5001 --backend-store-uri sqlite:///mlflow.db
 # Open http://localhost:5001
 # Note: port 5000 is blocked on macOS by AirPlay Receiver
+
+
 ```
