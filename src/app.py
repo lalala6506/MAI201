@@ -39,6 +39,7 @@ import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+from contextlib import asynccontextmanager
 
 MODELS_DIR = Path("models")
 FEATURE_COLUMNS_PATH = Path("data/processed/feature_columns.json")
@@ -103,8 +104,8 @@ class CustomerRecord(BaseModel):
     MonthlyCharges: float = Field(ge=0)
     TotalCharges: float = Field(ge=0)
 
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "gender": "Female",
                 "SeniorCitizen": 0,
@@ -127,7 +128,7 @@ class CustomerRecord(BaseModel):
                 "TotalCharges": 1020.0,
             }
         }
-
+    }
 
 class PredictionResponse(BaseModel):
     churn_prediction: Literal["Yes", "No"]
@@ -212,11 +213,18 @@ def encode_record(record: CustomerRecord, feature_columns: list) -> pd.DataFrame
     df = df[feature_columns]
     return df
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global model, scaler, feature_columns, model_type
+    model, scaler, feature_columns = load_artifacts()
+    model_type = type(model).__name__
+    yield
 
 app = FastAPI(
     title="Telco Churn Prediction API",
     description="Predicts whether a telecom customer is likely to churn.",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 model = None
@@ -224,12 +232,6 @@ scaler = None
 feature_columns = None
 model_type = None
 
-
-@app.on_event("startup")
-def startup():
-    global model, scaler, feature_columns, model_type
-    model, scaler, feature_columns = load_artifacts()
-    model_type = type(model).__name__
 
 
 @app.get("/health")
