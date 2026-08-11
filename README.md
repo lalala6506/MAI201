@@ -9,11 +9,11 @@ Predicts which telecom customers are likely to cancel their subscription.
 
 ## Team
 
-| Member | Role | Phase 1 Tasks |
+| Member | Role | Tasks |
 |---|---|---|
-| Devreet Kaur | ML Lead | EDA notebook, train.py, MLflow experiments 1 and 2, tech stack docs |
-| Arushi Anand | Engineering Lead | Architecture diagram, dataset docs, evaluate.py, MLflow experiment 3 |
-| Cha Li | Project + Docs Lead | prepare.py, DVC setup, dvc.yaml, reproducibility testing |
+| Devreet Kaur | ML Lead | EDA notebook, train.py, MLflow experiments 1 and 2, tech stack docs, Write src/app.py (FastAPI prediction endpoint), model_card.md, create test case for API|
+| Arushi Anand | Engineering Lead | Architecture diagram, dataset docs, evaluate.py, MLflow experiment 3, Docker Building, Render Deployment, CI with atuo-deploy, Public API    |
+| Cha Li | Project + Docs Lead | prepare.py, DVC setup, dvc.yaml, reproducibility testing, Monitor and detect drift withEvidentlyAI, auto-retraining script, model comparsion metrics |
 
 ---
 
@@ -191,8 +191,8 @@ docker stop $(docker ps -q)
 
 # Monitor and Retraining
 
-[Drift Report](reports/drift/data_summary.json)
-The detail report can be viewed at [Drift Report](data_drift_report.html)
+[Drift Report](reports/drift/drift_summary.json) .
+The detail report can be viewed at [Detail Drift Report](reports/drift/data_drift_report.html)
 
 ## How to monitor and retraining
 python src/monitor.py\
