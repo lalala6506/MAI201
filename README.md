@@ -2,8 +2,6 @@
 # MAI201 MLOps - Customer Churn Prediction
 
 Predicts which telecom customers are likely to cancel their subscription.
-Phase 1 covers the dataset, architecture, DVC pipeline, and MLflow experiment tracking.
-
 
 **Team:** Group 2 | Seneca Polytechnic | Summer 2026 | Instructor: Asma Azim
 
@@ -194,6 +192,7 @@ docker stop $(docker ps -q)
 # Monitor and Retraining
 
 [Drift Report](reports/drift/data_summary.json)
+The detail report can be viewed at [Drift Report](data_drift_report.html)
 
 ## How to monitor and retraining
 python src/monitor.py\
