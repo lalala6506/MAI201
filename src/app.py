@@ -32,6 +32,7 @@ pins these exact values down.
 """
 
 import json
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Literal
 
@@ -39,7 +40,6 @@ import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
-from contextlib import asynccontextmanager
 
 MODELS_DIR = Path("models")
 FEATURE_COLUMNS_PATH = Path("data/processed/feature_columns.json")
@@ -130,6 +130,7 @@ class CustomerRecord(BaseModel):
         }
     }
 
+
 class PredictionResponse(BaseModel):
     churn_prediction: Literal["Yes", "No"]
     churn_probability: float
@@ -160,7 +161,9 @@ def load_artifacts():
     return model, scaler, feature_columns
 
 
-def encode_record(record: CustomerRecord, feature_columns: list) -> pd.DataFrame:
+def encode_record(
+    record: CustomerRecord, feature_columns: list
+) -> pd.DataFrame:
     """
     Turn one raw customer record into the exact same encoded row shape
     that prepare.py produces for training data. See the module docstring
@@ -208,10 +211,13 @@ def encode_record(record: CustomerRecord, feature_columns: list) -> pd.DataFrame
     if missing:
         raise HTTPException(
             status_code=500,
-            detail=f"Encoding produced a row missing expected columns: {missing}",
+            detail=(
+                f"Encoding produced a row missing expected columns: {missing}"
+            ),
         )
     df = df[feature_columns]
     return df
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -219,6 +225,7 @@ async def lifespan(app: FastAPI):
     model, scaler, feature_columns = load_artifacts()
     model_type = type(model).__name__
     yield
+
 
 app = FastAPI(
     title="Telco Churn Prediction API",
@@ -231,7 +238,6 @@ model = None
 scaler = None
 feature_columns = None
 model_type = None
-
 
 
 @app.get("/health")
