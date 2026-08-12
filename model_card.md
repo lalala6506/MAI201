@@ -8,6 +8,7 @@
 - **Developed by:** Group 2, MAI201, Seneca Polytechnic. Devreet Kaur (ML Lead), Arushi Anand (Engineering Lead), Cha Li (Project and Docs Lead)
 - **Framework:** scikit-learn
 - **Hyperparameters:** C=1.0, max_iter=200, class_weight=balanced, random_state=42
+- **Live API:** https://churn-predictor-4pg2.onrender.com/docs — see [Deployment](#deployment)
 
 **Why Logistic Regression over Random Forest.** Both models were trained and compared during Phase 1. Random Forest scored slightly higher on accuracy and precision, but Logistic Regression had meaningfully higher recall on the churn class (0.81 vs 0.74 on validation). In this business problem, a missed churner, a customer who leaves without any retention attempt, costs more than a wasted retention offer sent to someone who was never going to leave. Recall was treated as the deciding metric for that reason, not accuracy.
 
@@ -21,6 +22,24 @@
 - Not intended as the sole basis for automated account actions (automatic discounts, automatic cancellations, automatic account flags) without a human reviewing the recommendation first.
 - Not validated on customer populations outside the training distribution, a different country's telecom market, a different pricing structure, or a customer base with different service offerings would need revalidation before this model is trusted on them.
 - Not intended for use in any legally protected decision, credit, employment, insurance, or housing. This is a retention marketing tool, nothing more.
+
+## Deployment
+
+The model is served as a FastAPI application, containerized with Docker and deployed on Render. The deployed artifact is the Logistic Regression model described above; the CI/CD pipeline in `.github/workflows/ci.yml` builds and redeploys on merge.
+
+**Base URL:** https://churn-predictor-4pg2.onrender.com/docs
+
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/health` | GET | Liveness check, returns service and model load status |
+| `/predict` | POST | Returns churn probability and predicted class for one customer |
+| `/docs` | GET | Interactive Swagger UI for trying `/predict` without writing a payload |
+
+```bash
+curl https://churn-predictor-4pg2.onrender.com/health
+```
+
+**Cold start.** The service runs on Render's free tier, which sleeps after a period of inactivity. The first request after idle can take 30 to 60 seconds to return while the container wakes. Subsequent requests respond normally. Any client calling this API should set timeouts accordingly rather than treating a slow first response as a failure.
 
 ## Training Data
 

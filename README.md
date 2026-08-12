@@ -1,7 +1,7 @@
+[![CI](https://github.com/lalala6506/MAI201/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/lalala6506/MAI201/actions/workflows/ci.yml)
 # MAI201 MLOps - Customer Churn Prediction
 
 Predicts which telecom customers are likely to cancel their subscription.
-Phase 1 covers the dataset, architecture, DVC pipeline, and MLflow experiment tracking.
 
 **Team:** Group 2 | Seneca Polytechnic | Summer 2026 | Instructor: Asma Azim
 
@@ -9,11 +9,11 @@ Phase 1 covers the dataset, architecture, DVC pipeline, and MLflow experiment tr
 
 ## Team
 
-| Member | Role | Phase 1 Tasks |
+| Member | Role | Tasks |
 |---|---|---|
-| Devreet Kaur | ML Lead | EDA notebook, train.py, MLflow experiments 1 and 2, tech stack docs |
-| Arushi Anand | Engineering Lead | Architecture diagram, dataset docs, evaluate.py, MLflow experiment 3 |
-| Cha Li | Project + Docs Lead | prepare.py, DVC setup, dvc.yaml, reproducibility testing |
+| Devreet Kaur | ML Lead | EDA notebook, train.py, MLflow experiments 1 and 2, tech stack docs, Write src/app.py (FastAPI prediction endpoint), model_card.md, create test case for API|
+| Arushi Anand | Engineering Lead | Architecture diagram, dataset docs, evaluate.py, MLflow experiment 3, Docker Building, Render Deployment, CI with atuo-deploy, Public API    |
+| Cha Li | Project + Docs Lead | prepare.py, DVC setup, dvc.yaml, reproducibility testing, Monitor and detect drift withEvidentlyAI, auto-retraining script, model comparsion metrics |
 
 ---
 
@@ -141,6 +141,10 @@ Evaluated by `evaluate.py` on the held-out test set (never touched during traini
 | F1 Score | 0.6213 |
 | ROC-AUC | 0.8448 |
 
+## MODEL CARD
+
+![Model Card Detail](model_card.md)
+
 ## What Is Not Committed to Git
 
 These files exist locally or in DVC/S3 but are never committed to the Git repo:
@@ -157,8 +161,46 @@ These files exist locally or in DVC/S3 but are never committed to the Git repo:
 | `mlflow.db` | Local MLflow SQLite database | Machine-specific |
 | `.dvc/config.local` | S3 credentials | Never leave your machine |
 
+## Live Demo API 
+**Live API:** https://churn-predictor-4pg2.onrender.com/docs 
 
-## How to Run
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/health` | GET | Liveness check, returns service and model load status |
+| `/predict` | POST | Returns churn probability and predicted class for one customer |
+| `/docs` | GET | Interactive Swagger UI for trying `/predict` without writing a payload |
+
+**Cold start.** The service runs on Render's free tier, which sleeps after a period of inactivity. The first request after idle can take 30 to 60 seconds to return while the container wakes. Subsequent requests respond normally. Any client calling this API should set timeouts accordingly rather than treating a slow first response as a failure.
+
+
+## Build and Test Docker
+
+#### Build the Docker image
+docker build -t churn-predictor .
+
+#### Run the container
+docker run -p 5001:8000 churn-predictor
+Windows can also use: docker run -p 8000:8000 churn-predictor
+
+#### In a second terminal -- test it
+curl http://localhost:5001/health
+Must return: {"status":"ok",...}
+
+#### Stop the container (Ctrl+C or)
+docker stop $(docker ps -q)
+
+# Monitor and Retraining
+
+[Drift Report](reports/drift/drift_summary.json) .
+The detail report can be viewed at [Detail Drift Report](reports/drift/data_drift_report.html)
+
+## How to monitor and retraining
+python src/monitor.py\
+MLFLOW_TRACKING_URI=sqlite:///mlflow.db python src/retrain.py
+
+
+
+# How to Run
 
 ```bash
 # 1. Clone the repo
@@ -188,4 +230,12 @@ dvc metrics show
 mlflow ui --port 5001 --backend-store-uri sqlite:///mlflow.db
 # Open http://localhost:5001
 # Note: port 5000 is blocked on macOS by AirPlay Receiver
+
+# 8. Health check
+curl https://churn-predictor-4pg2.onrender.com/health
+
+# 9. how to run tests
+pytest tests/test_api.py -v
+
+
 ```
