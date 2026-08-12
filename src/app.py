@@ -32,6 +32,7 @@ pins these exact values down.
 """
 
 import json
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Literal
 
@@ -103,8 +104,8 @@ class CustomerRecord(BaseModel):
     MonthlyCharges: float = Field(ge=0)
     TotalCharges: float = Field(ge=0)
 
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "gender": "Female",
                 "SeniorCitizen": 0,
@@ -127,6 +128,7 @@ class CustomerRecord(BaseModel):
                 "TotalCharges": 1020.0,
             }
         }
+    }
 
 
 class PredictionResponse(BaseModel):
@@ -159,7 +161,9 @@ def load_artifacts():
     return model, scaler, feature_columns
 
 
-def encode_record(record: CustomerRecord, feature_columns: list) -> pd.DataFrame:
+def encode_record(
+    record: CustomerRecord, feature_columns: list
+) -> pd.DataFrame:
     """
     Turn one raw customer record into the exact same encoded row shape
     that prepare.py produces for training data. See the module docstring
@@ -207,29 +211,33 @@ def encode_record(record: CustomerRecord, feature_columns: list) -> pd.DataFrame
     if missing:
         raise HTTPException(
             status_code=500,
-            detail=f"Encoding produced a row missing expected columns: {missing}",
+            detail=(
+                f"Encoding produced a row missing expected columns: {missing}"
+            ),
         )
     df = df[feature_columns]
     return df
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global model, scaler, feature_columns, model_type
+    model, scaler, feature_columns = load_artifacts()
+    model_type = type(model).__name__
+    yield
 
 
 app = FastAPI(
     title="Telco Churn Prediction API",
     description="Predicts whether a telecom customer is likely to churn.",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 model = None
 scaler = None
 feature_columns = None
 model_type = None
-
-
-@app.on_event("startup")
-def startup():
-    global model, scaler, feature_columns, model_type
-    model, scaler, feature_columns = load_artifacts()
-    model_type = type(model).__name__
 
 
 @app.get("/health")
