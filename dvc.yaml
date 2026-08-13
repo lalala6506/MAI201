@@ -1,0 +1,73 @@
+# dvc.yaml
+# --------
+# Defines the DVC pipeline: three stages that run in order.
+#
+# How DVC works:
+#   Each stage lists its inputs (deps) and outputs (outs).
+#   DVC hashes every dep. If a dep has not changed since the last run,
+#   DVC skips that stage. If it has changed, DVC re-runs that stage
+#   and every stage that depends on its output.
+#
+# Run the full pipeline:
+#   dvc repro
+#
+# Force a full re-run:
+#   dvc repro --force
+#
+# View current metrics:
+#   dvc metrics show
+
+stages:
+
+  # Stage 1: Prepare
+  # Reads the raw CSV and produces cleaned train/val/test splits.
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+      - src/prepare.py
+      - data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv
+    outs:
+      - data/processed/train.csv
+      - data/processed/val.csv
+      - data/processed/test.csv
+      - data/processed/feature_columns.json
+
+  # Stage 2: Train
+  # Reads the processed training data and params.yaml.
+  # Produces a trained model and validation metrics.
+  train:
+    cmd: python src/train.py --model logistic
+    deps:
+      - src/train.py
+      - data/processed/train.csv
+      - data/processed/val.csv
+      - data/processed/feature_columns.json
+      - params.yaml
+    params:
+      - params.yaml:
+          - random_forest
+    outs:
+      - models/model.pkl
+      - models/scaler.pkl
+    metrics:
+      - reports/metrics.json:
+          cache: false
+    # cache: false means DVC includes this file in git history
+    # so we can track how metrics change across commits.
+
+  # Stage 3: Evaluate
+  # Loads the trained model and runs it against the test set.
+  # This stage touches the test set for the first time.
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - models/model.pkl
+      - models/scaler.pkl
+      - data/processed/test.csv
+    outs:
+      - reports/plots/confusion_matrix.png
+      - reports/plots/roc_curve.png
+    metrics:
+      - reports/metrics_test.json:
+          cache: false

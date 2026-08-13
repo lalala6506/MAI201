@@ -1,0 +1,38 @@
+# Core ML
+scikit-learn>=1.3.0
+pandas>=2.0.0,<3
+numpy>=1.24.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+joblib>=1.3.0
+
+# Pipeline and data versioning
+dvc[s3]==3.55.2
+
+# Experiment tracking
+mlflow>=2.0.0,<3.14.0
+
+# API serving (Phase 2)
+fastapi>=0.100.0
+uvicorn>=0.23.0
+
+# Direct S3 download in the container (see download_model.py), avoids
+# needing DVC/git inside the Docker image
+boto3>=1.28.0
+
+# Utilities
+pyyaml>=6.0
+
+# Model Monitor 
+evidently<0.7 
+
+# File encryption properties, configurations
+pyarrow<25 
+cryptography>=43,<44
+# Testing (needed for CI, not just local dev)
+pytest>=7.4.0
+httpx>=0.24.0
+
+# Pinned to avoid a real incompatibility: dvc 3.55.2 imports an internal
+# pathspec symbol (_DIR_MARK) that newer pathspec releases removed
+pathspec==0.12.1
